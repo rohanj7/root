@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+   "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+   "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<constant name="struts.devMode" value="true" />
+	<package  name="default" extends="json-default">
+	    <interceptors>
+			<interceptor name="authentication" class="com.auth.AuthenticationInterceptor"></interceptor>
+			<interceptor-stack name="authStack">
+				<interceptor-ref name="authentication"></interceptor-ref>
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+				
+		<default-interceptor-ref name="authStack"></default-interceptor-ref>
+				
+    	<global-results>
+   			<result name="error">/error.jsp</result>
+   			<result name="already">/already.jsp</result>
+   		</global-results>
+   		   	
+    	<action name="welcome" class="com.action.admin.WelcomeScreenAction" method="getAllDetails">
+    	    <interceptor-ref name="defaultStack"></interceptor-ref>
+    	    <result name="success">/welcome.jsp</result> 
+    	</action>	
+    	
+    	<action name="loginPage" class="com.action.RegistrationAction" method="getRegisterPageDetails">
+    	     <interceptor-ref name="defaultStack"></interceptor-ref>
+    	    <result>/login.jsp</result> 
+    	</action>
+		
+		<action name="register" class="com.action.RegistrationAction" method="registerUser">
+		     <interceptor-ref name="defaultStack"></interceptor-ref>
+			<result name="success">/thankyou.jsp</result>
+		</action>
+		
+		<!-- Student/user Actions -->
+		<action name="getUserDetails" class="com.action.UserAction" method="getAllDetails">
+			<result name="success">/studentHome.jsp</result>
+		</action>
+		
+		<action name="updateUserProfile" class="com.action.UserAction" method="updateUser">
+			<result name="success" type="redirect">/getUserDetails.action?serverStatus=${serverStatus}</result>
+		</action>
+		
+		<action name="login" class="com.auth.LoginAction" method="execute">
+		    <interceptor-ref name="defaultStack"></interceptor-ref>
+			<result name="success" type="redirect">/getUserDetails.action</result>
+			<result name="admin" type="redirect">/getConfirmUserWindow.action</result>
+		</action>
+		
+		<action name="logout" class="com.auth.LoginAction" method="logout">
+		     <interceptor-ref name="defaultStack"></interceptor-ref>
+			<result name="success" type="redirect">/loginPage.action</result>
+		</action>
+		
+		<!--  NOTIFICATIONS -->
+		<action name="getNotWindow" class="com.action.admin.AdminNotificationAction" method="getNotification">
+			<result name="success">/admin/notificationEditor.jsp</result>
+		</action>
+
+		<action name="addNotification" class="com.action.admin.AdminNotificationAction" method="addNotification">
+			<result name="success" type="redirect">/getNotWindow.action?serverStatus=${serverStatus}</result>
+		</action>
+		
+		<action name="removeNotice" class="com.action.admin.AdminNotificationAction" method="removeNotification">
+			<result name="success" type="redirect">/getNotWindow.action?serverStatus=${serverStatus}</result>
+		</action>
+		
+		<action name="updateNotice" class="com.action.admin.AdminNotificationAction" method="updateNotification">
+			<result name="success" type="redirect">/getNotWindow.action?serverStatus=${serverStatus}</result>
+		</action>
+		
+		<!-- CONFIRM USER -->
+		<action name="getConfirmUserWindow" class="com.action.admin.ConfirmUserAction" method="getUser">
+			<result name="success">/admin/confirmUser.jsp</result>
+		</action>
+		
+		<action name="changeUserStatus" class="com.action.admin.ConfirmUserAction" method="updateUserStatus">
+			<result name="success" type="redirect">/getConfirmUserWindow.action?serverStatus=${serverStatus}</result>
+		</action>
+		
+		<action name="suspendAll" class="com.action.admin.ConfirmUserAction" method="suspendAll">
+			<result name="success" type="redirect">/getConfirmUserWindow.action?serverStatus=${serverStatus}</result>
+		</action>
+		
+		<!-- Subject Editor -->
+		<action name="getSubjectWindow" class="com.action.admin.SubjectEditorAction" method="getAllSubject">
+			<result name="success">/admin/subjectEditor.jsp</result>
+		</action>
+		
+		<action name="addSubject" class="com.action.admin.SubjectEditorAction" method="addSubject">
+			<result name="success" type="redirect">/getSubjectWindow.action?serverStatus=${serverStatus}</result>
+		</action>
+		
+		<action name="updateSubject" class="com.action.admin.SubjectEditorAction" method="updateSubject">
+			<result name="success" type="redirect">/getSubjectWindow.action?serverStatus=${serverStatus}</result>
+		</action>
+		
+		<!-- Student Profile Editor -->
+		<action name="getAllUser" class="com.action.admin.StudentProfileEditorAction" method="getAllUser">
+			<result name="success">/admin/studentProfileEditor.jsp</result>
+		</action>
+		
+		<action name="addUser" class="com.action.admin.StudentProfileEditorAction" method="addUser">
+			<result name="success" type="redirect">/getAllUser.action?serverStatus=${serverStatus}</result>
+		</action>
+		
+		<action name="updateUser" class="com.action.admin.StudentProfileEditorAction" method="updateUser">
+			<result name="success" type="redirect">/getAllUser.action?serverStatus=${serverStatus}</result>
+		</action>
+		
+		<action name="deleteUser" class="com.action.admin.StudentProfileEditorAction" method="deleteUser">
+			<result name="success" type="redirect">/getAllUser.action?serverStatus=${serverStatus}</result>
+		</action>
+		
+		<!-- Student Score Editor -->
+		<action name="getUserForMidSem" class="com.action.admin.scoreEditorAction" method="getUser">
+			<result name="success">/admin/scoreEditor.jsp</result>
+		</action>
+		
+		<action name="getUserForMidSem" class="com.action.admin.scoreEditorAction" method="getUser">
+			<result name="success">/admin/scoreEditor.jsp</result>
+		</action>
+		
+		<action name="getStudentScore" class="com.action.admin.scoreEditorAction" method="getStudentScore">
+			<result name="success" type="json"/>
+		</action>
+		
+		<action name="submitScore" class="com.action.admin.scoreEditorAction" method="submitScore">
+			<result name="success" type="json"/>
+		</action>
+		
+		
+	 </package>
+</struts>
